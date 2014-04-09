@@ -1,3 +1,4 @@
+import scala.async.Async.{async, await}
 import scala.concurrent.Future
 import scala.util.Success
 import scala.util.Failure
@@ -5,6 +6,7 @@ import scala.concurrent.Promise
 import scala.concurrent.future
 import scala.concurrent.blocking
 import scala.concurrent.ExecutionContext.Implicits.global
+
 
 object FutureMonad {
   val timeFmt = new java.text.SimpleDateFormat("HH:mm:ss")
@@ -70,4 +72,14 @@ object FutureMonad {
                                   setupDns("bob-the-customer")(ec2Ip)))
       }
     }
-}
+  
+  /*
+  val anotherDu = async {
+    val ips = await(all(List(makeEc2Machine("du-1"), makeRdsInstance("rds-1"))))
+    ips match {
+      case (ec2Ip :: rdsIp :: Nil) =>
+        all(List(runCustomization(Map("ADMINUSER" -> "bob", "dbip" -> rdsIp))(ec2Ip),
+                 setupDns("bob-the-customer")(ec2Ip)))
+    }
+ */
+  }

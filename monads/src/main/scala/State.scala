@@ -14,7 +14,6 @@ object State {
     }   
   }
 
- 
   val charParser = (c: Char) => (input: List[Char]) => input match {
 	case curr :: rest => if (curr == c) ParseState(Right(List(c)), rest)
 	                     else ParseState(Left("failed to find " + c + " at " + curr), rest)
