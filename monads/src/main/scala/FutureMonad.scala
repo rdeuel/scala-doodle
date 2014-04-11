@@ -1,4 +1,3 @@
-import scala.async.Async.{async, await}
 import scala.concurrent.Future
 import scala.util.Success
 import scala.util.Failure
@@ -69,17 +68,13 @@ object FutureMonad {
     all(List(makeEc2Machine("du-1"), makeRdsInstance("rds-1"))) flatMap {
       case (ec2Ip :: rdsIp :: Nil) => {
         all(List(runCustomization(Map("ADMINUSER" -> "bob", "dbip" -> rdsIp))(ec2Ip),
-                                  setupDns("bob-the-customer")(ec2Ip)))
+                 setupDns("bob-the-customer")(ec2Ip)))
       }
     }
   
-  /*
-  val anotherDu = async {
-    val ips = await(all(List(makeEc2Machine("du-1"), makeRdsInstance("rds-1"))))
-    ips match {
-      case (ec2Ip :: rdsIp :: Nil) =>
-        all(List(runCustomization(Map("ADMINUSER" -> "bob", "dbip" -> rdsIp))(ec2Ip),
-                 setupDns("bob-the-customer")(ec2Ip)))
-    }
- */
-  }
+  def makeDuForComp = for {
+    ec2Ip :: rdsIp :: Nil <- all(List(makeEc2Machine("du-1"), makeRdsInstance("rds-1")))
+    _ <- all(List(runCustomization(Map("ADMINUSER" -> "bob", "dbip" -> rdsIp))(ec2Ip),
+                  setupDns("bob-the-customer")(ec2Ip)))
+  } yield "It works!"
+}

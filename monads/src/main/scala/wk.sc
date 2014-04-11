@@ -3,9 +3,9 @@ import Composition._
 object wk {
   
   def one_plus_sqrt_one_over_x(x: Double) =
-    id(plus(1)(sqrt(invert(x))))                  //> one_plus_sqrt_one_over_x: (x: Double)Double
+    plus(1)(sqrt(invert(id(x))))                  //> one_plus_sqrt_one_over_x: (x: Double)Double
   
-  one_plus_sqrt_one_over_x(10)                    //> res0: Double = 1.3164201586865079
+  one_plus_sqrt_one_over_x(8)                     //> res0: Double = 1.353636015646637
 
   val one_plus_sqrt_one_over_x_compose =
     plus(1) compose
@@ -13,7 +13,7 @@ object wk {
     invert compose
     id[Double]                                    //> one_plus_sqrt_one_over_x_compose  : Double => Double = <function1>
     
-  one_plus_sqrt_one_over_x_compose(10)            //> res1: Double = 1.3164201586865079
+  one_plus_sqrt_one_over_x_compose(100)           //> res1: Double = 1.1000071403871174
   
   val one_plus_sqrt_one_over_x_andthen =
     id[Double] andThen

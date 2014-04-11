@@ -3,8 +3,8 @@ import State._
 object wkstate {
   val pB = charParser('B')                        //> pB  : List[Char] => State.ParseState = <function1>
   pB("Bob".toList)                                //> res0: State.ParseState = ParseState(Right(List(B)),List(o, b))
-  pB("Steve".toList)                              //> res1: State.ParseState = ParseState(Left(failed to find B at S),List(t, e, v,
-                                                  //|  e))
+  pB("Steve".toList)                              //> res1: State.ParseState = ParseState(Left(failed to find B at S),List(t, e, v
+                                                  //| , e))
   
   val pBob = (input:List[Char]) =>
     id(input) flatMap
@@ -55,4 +55,15 @@ object wkstate {
                                                   //| )),List())
  programmer_or_singer("Bob Barker".toList)        //> res8: State.ParseState = ParseState(Left(failed to find D at B),List(a, r, 
                                                   //| k, e, r))
+ 
+ val gw = wordParser("George Washington")         //> gw  : List[Char] => State.ParseState = <function1>
+ gw("George Washington".toList)                   //> res9: State.ParseState = ParseState(Right(List(G, e, o, r, g, e,  , W, a, s
+                                                  //| , h, i, n, g, t, o, n)),List())
+ gw("George Jefferson".toList)                    //> res10: State.ParseState = ParseState(Left(failed to find W at J),List(e, f,
+                                                  //|  f, e, r, s, o, n))
+ 
+ numberOnly("0".toList)                           //> res11: State.ParseState = ParseState(Right(List(0)),List())
+ numberOnly("a".toList)                           //> res12: State.ParseState = ParseState(Left(failed to find 9 at a),List())
+ number("01234".toList)                           //> res13: Product with Serializable with scala.util.Either[String,Int] = Right
+                                                  //| (0)
 }

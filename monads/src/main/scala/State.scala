@@ -10,8 +10,11 @@ object State {
         case ParseState(Left(error), newrest) => ParseState(Left(error), newrest)
         case ParseState(Right(newMs), newrest) => ParseState(Right(ms ++ newMs), newrest)
       }
-    
-    }   
+    }
+    def map[B](f: List[Char] => B) = result match {
+      case Left(err) => Left(err)
+      case Right(ms) => Right(f(ms))
+    }
   }
 
   val charParser = (c: Char) => (input: List[Char]) => input match {
@@ -27,5 +30,13 @@ object State {
          (input : List[Char]) = left(input) match {
     case leftIsGood @ ParseState(Right(_), _) => leftIsGood
     case _ => right(input)
+  }
+  
+  val wordParser = (word : String) => (input : List[Char]) =>
+    word.toList.foldLeft(id(input)) {(parser, c) => parser flatMap charParser(c)}
+    
+  val numberOnly =
+    (1 to 9).foldLeft(charParser('0')) {(parser, digit) => 
+      or(parser, charParser(digit.toString().charAt(0)))
   }
 }
